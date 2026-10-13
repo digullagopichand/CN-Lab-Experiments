@@ -1,0 +1,61 @@
+Week-1B Byte Stuffing/Character Stuffing
+#include<stdio.h>
+#include<string.h>
+#include<conio.h>
+
+void main()
+{
+    char data[100], frame[200];
+    char flag[] = "flag";
+    int i,j,n;
+
+    printf("Enter the input string: ");
+    gets(data);
+
+    printf("\nEntered Input = %s\n",data);
+
+    n = strlen(data);
+
+    /* Starting Flag */
+    for(i=0;i<4;i++)
+        frame[i]=flag[i];
+
+    j=4;
+
+    for(i=0;i<n;i++)
+    {
+        /* Stuff "flag" */
+        if(data[i]=='f' &&
+           data[i+1]=='l' &&
+           data[i+2]=='a' &&
+           data[i+3]=='g')
+        {
+            frame[j++]='e';
+            frame[j++]='s';
+            frame[j++]='c';
+        }
+
+        /* Stuff "esc" */
+        else if(data[i]=='e' &&
+                data[i+1]=='s' &&
+                data[i+2]=='c')
+        {
+            frame[j++]='e';
+            frame[j++]='s';
+            frame[j++]='c';
+        }
+
+        frame[j]=data[i];
+        j++;
+    }
+
+    /* Ending Flag */
+    for(i=0;i<4;i++)
+        frame[j++]=flag[i];
+
+    frame[j]='\0';
+
+    printf("\nString After Stuffing = %s",frame);
+
+    getch();
+}
