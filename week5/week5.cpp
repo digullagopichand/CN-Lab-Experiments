@@ -1,62 +1,54 @@
-
 #include <stdio.h>
-#include <stdlib.h>
-
-struct Edge {
-    int u, v, cost;
-};
-
-int parent[10];
-
-int find(int vertex) {
-    while (parent[vertex])
-        vertex = parent[vertex];
-    return vertex;
-}
-
-int compare(const void *a, const void *b) {
-    return ((struct Edge *)a)->cost - ((struct Edge *)b)->cost;
-}
 
 int main() {
-    struct Edge edges[45], temp;
-    int n, m = 0, i, j, u, v, mincost = 0, count = 1;
+    int cost[10][10], visited[10] = {0};
+    int n, i, j, u, v;
+    int min, mincost = 0, count = 1;
 
-    printf("\nImplementation of Kruskal's Algorithm for Broadcast Tree\n");
-    printf("\nEnter the number of vertices: ");
+    printf("Enter number of vertices: ");
     scanf("%d", &n);
 
-    printf("\nEnter the cost adjacency matrix:\n");
-    for (i = 1; i <= n; i++)
+    printf("Enter cost adjacency matrix:\n");
+
+    for (i = 1; i <= n; i++) {
         for (j = 1; j <= n; j++) {
-            scanf("%d", &u);
-            if (j > i && u != 0) {
-                edges[m].u = i;
-                edges[m].v = j;
-                edges[m++].cost = u;
-            }
-        }
-
-    qsort(edges, m, sizeof(struct Edge), compare);
-
-    printf("\nThe edges of Minimum Cost Spanning Tree are:\n");
-
-    for (i = 0; i < m && count < n; i++) {
-        u = find(edges[i].u);
-        v = find(edges[i].v);
-
-        if (u != v) {
-            parent[v] = u;
-            printf("%d. Edge (%d, %d) = %d\n",
-                   count++, edges[i].u, edges[i].v, edges[i].cost);
-            mincost += edges[i].cost;
+            scanf("%d", &cost[i][j]);
         }
     }
 
-    if (count == n)
-        printf("\nMinimum Cost = %d\n", mincost);
-    else
-        printf("\nSpanning tree does not exist.\n");
+    visited[1] = 1;
+
+    printf("\nEdges of Minimum Cost Spanning Tree:\n");
+
+    while (count < n) {
+        min = 9999;
+
+        for (i = 1; i <= n; i++) {
+            for (j = 1; j <= n; j++) {
+
+                if (visited[i] == 1 && visited[j] == 0) {
+                    if (cost[i][j] != 0 && cost[i][j] < min) {
+                        min = cost[i][j];
+                        u = i;
+                        v = j;
+                    }
+                }
+            }
+        }
+
+        if (min == 9999) {
+            printf("Spanning tree does not exist\n");
+            return 0;
+        }
+
+        printf("Edge (%d, %d) = %d\n", u, v, min);
+
+        visited[v] = 1;
+        mincost = mincost + min;
+        count++;
+    }
+
+    printf("\nMinimum Cost = %d\n", mincost);
 
     return 0;
 }
